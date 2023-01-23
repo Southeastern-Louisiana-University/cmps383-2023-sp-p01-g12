@@ -9,5 +9,7 @@ namespace SP23.P01.Web.Data
             : base(options)
         {
         }
+
+        public DbSet<TrainStation> TrainStations { get; set; }
     }
 }
