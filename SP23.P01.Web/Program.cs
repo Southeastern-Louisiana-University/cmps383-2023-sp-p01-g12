@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SP23.P01.Web.Data;
+using SP23.P01.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 using (var scope = app.Services.CreateScope())
 {
