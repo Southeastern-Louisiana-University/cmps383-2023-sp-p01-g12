@@ -11,5 +11,13 @@ namespace SP23.P01.Web.Data
         }
 
         public DbSet<TrainStation> TrainStations { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+
+        }
     }
 }
