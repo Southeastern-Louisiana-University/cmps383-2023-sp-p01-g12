@@ -21,16 +21,19 @@ namespace SP23.P01.Web.Models
                 context.TrainStations.AddRange(
                     new TrainStation
                     {
+                        Id = 1,
                         Name = "Station 1",
                         Address = "1234 Street"
                     },
                     new TrainStation
                     {
+                        Id = 2,
                         Name = "Station 2",
                         Address = "5678 Street"
                     },
                     new TrainStation
                     {
+                        Id = 3,
                         Name = "Station 3",
                         Address = "9245 Street",
                     }
