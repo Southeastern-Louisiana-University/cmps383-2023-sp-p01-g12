@@ -6,7 +6,7 @@ using SP23.P01.Web.Entities;
 namespace SP23.P01.Web.Controllers
 {
     [ApiController]
-    [Route("/api/trainStations")]
+    [Route("/api/stations")]
     public class TrainStationsController : Controller
     {
         private readonly DataContext _dataContext;
