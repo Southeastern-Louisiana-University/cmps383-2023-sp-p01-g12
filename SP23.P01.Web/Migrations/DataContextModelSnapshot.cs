@@ -21,7 +21,7 @@ namespace SP23.P01.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SP23.P01.Web.Models.TrainStation", b =>
+            modelBuilder.Entity("SP23.P01.Web.Entities.TrainStation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace SP23.P01.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TrainStations");
+                    b.ToTable("TrainStations", (string)null);
                 });
 #pragma warning restore 612, 618
         }

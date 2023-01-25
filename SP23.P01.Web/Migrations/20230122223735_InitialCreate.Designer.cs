@@ -24,7 +24,7 @@ namespace SP23.P01.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SP23.P01.Web.Models.TrainStation", b =>
+            modelBuilder.Entity("SP23.P01.Web.Entities.TrainStation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
