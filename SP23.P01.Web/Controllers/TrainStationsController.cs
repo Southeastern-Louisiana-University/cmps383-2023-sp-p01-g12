@@ -35,7 +35,7 @@ namespace SP23.P01.Web.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{trainStationsId}")]
+        [HttpGet("{trainStationId}")]
         public ActionResult GetById([FromRoute] int trainStationId)
         {
             var response = new Response();
