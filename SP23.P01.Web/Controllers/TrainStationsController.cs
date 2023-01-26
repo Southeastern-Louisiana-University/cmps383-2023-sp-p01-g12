@@ -2,6 +2,7 @@
 using SP23.P01.Web.Common;
 using SP23.P01.Web.Data;
 using SP23.P01.Web.Entities;
+using System.Net.Mail;
 
 namespace SP23.P01.Web.Controllers
 {
@@ -53,8 +54,8 @@ namespace SP23.P01.Web.Controllers
             return Ok(trainStationToReturn);
         }
 
-        [HttpPut("edit-trainStation/{trainStationId:int}")]
-        public ActionResult EditTrainStation([FromRoute] int trainStationId)
+        [HttpPut("")]
+        public ActionResult EditTrainStation([FromRoute] int trainStationId, TrainStationUpdateDto trainStationUpdateDto)
         {
             var trainStationToEdit = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
 
@@ -64,7 +65,29 @@ namespace SP23.P01.Web.Controllers
                 return NotFound(new Error("trainStationId", "Id not found"));
             }
 
-            return Ok(trainStationToEdit);
+            //name must be provided - return 400
+            if (string.IsNullOrEmpty(trainStationUpdateDto.Name.Trim()))
+            {
+                return BadRequest("Name cannot be empty");
+            }
+
+            //name cannot be more than 120 chars
+
+            //address must be provided - return 400
+
+            //return updated Dto
+            trainStationToEdit.Name = trainStationUpdateDto.Name;
+            trainStationToEdit.Address = trainStationUpdateDto.Address;
+
+            _dataContext.SaveChanges();
+
+            var trainStationToReturn = new TrainStationUpdateDto
+            {
+                Name = trainStationUpdateDto.Name,
+                Address = trainStationUpdateDto.Address
+            };
+
+            return Ok(trainStationToReturn);
         }
     }
 }
