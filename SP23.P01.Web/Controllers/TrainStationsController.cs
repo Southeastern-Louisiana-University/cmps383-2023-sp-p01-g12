@@ -52,5 +52,19 @@ namespace SP23.P01.Web.Controllers
 
             return Ok(trainStationToReturn);
         }
+
+        [HttpPut("edit-trainStation/{trainStationId:int}")]
+        public ActionResult EditTrainStation([FromRoute] int trainStationId)
+        {
+            var trainStationToEdit = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
+
+            //check if null
+            if (trainStationToEdit == null)
+            {
+                return NotFound(new Error("trainStationId", "Id not found"));
+            }
+
+            return Ok(trainStationToEdit);
+        }
     }
 }
