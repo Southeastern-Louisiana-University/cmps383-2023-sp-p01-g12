@@ -2,6 +2,7 @@
 using SP23.P01.Web.Common;
 using SP23.P01.Web.Data;
 using SP23.P01.Web.Entities;
+using System.Net.Mail;
 
 namespace SP23.P01.Web.Controllers
 {
@@ -26,7 +27,7 @@ namespace SP23.P01.Web.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     Address = x.Address,
-            })
+                })
             .ToList();
 
             return Ok(trainStationToReturn);
@@ -56,17 +57,17 @@ namespace SP23.P01.Web.Controllers
         [HttpPost]
         public ActionResult Create([FromBody] TrainStationCreateDto trainStationCreateDto)
         {
-            if(String.IsNullOrWhiteSpace(trainStationCreateDto.Name))
+            if (String.IsNullOrWhiteSpace(trainStationCreateDto.Name))
             {
                 return BadRequest(new Error("name", "Name cannot be empty."));
             }
 
-            if(String.IsNullOrWhiteSpace(trainStationCreateDto.Address))
+            if (String.IsNullOrWhiteSpace(trainStationCreateDto.Address))
             {
                 return BadRequest(new Error("address", "Address cannot be empty."));
             }
 
-            if(trainStationCreateDto.Name.Length > 120)
+            if (trainStationCreateDto.Name.Length > 120)
             {
                 return BadRequest(new Error("name", "Name cannot be longer than 120 characters."));
             }
@@ -87,7 +88,52 @@ namespace SP23.P01.Web.Controllers
                 Address = trainStationToCreate.Address,
             };
 
-            return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id  }, trainStationToReturn);
+            return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id }, trainStationToReturn);
+        }
+
+        [HttpPut("{trainStationId}")]
+        public ActionResult UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, [FromRoute] int trainStationId)
+        {
+            var trainStationToUpdate = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
+
+            //can't be null
+            if (trainStationToUpdate == null)
+            {
+                return NotFound(new Error("trainStationId", "Train Station not found"));
+            }
+
+            //name must be provided - return 400 (bad request)
+            if (String.IsNullOrWhiteSpace(trainStationUpdateDto.Name))
+            {
+                return BadRequest(new Error("Name", "Name cannot be empty"));
+            }
+
+            //address must be provided - return 400
+            if (String.IsNullOrWhiteSpace(trainStationUpdateDto.Address))
+            {
+                return BadRequest(new Error("Address", "Address cannot be empty"));
+            }
+
+            //name cannot be more than 120 chars - return 400
+            if (trainStationUpdateDto.Name.Length > 120)
+            {
+                return BadRequest(new Error("Name", "Name cannot be longer than 120 characters"));
+            }
+
+            //update the trainStationUpdateDto with new info
+            trainStationToUpdate.Name = trainStationUpdateDto.Name;
+            trainStationToUpdate.Address = trainStationUpdateDto.Address;
+
+            _dataContext.SaveChanges();
+
+            var trainStationToReturn = new TrainStationGetDto
+            {
+                Id = trainStationToUpdate.Id,
+                Name = trainStationToUpdate.Name,
+                Address = trainStationToUpdate.Address
+            };
+
+            return Ok(trainStationToReturn);
         }
     }
 }
