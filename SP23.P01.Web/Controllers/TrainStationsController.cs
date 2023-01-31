@@ -54,6 +54,42 @@ namespace SP23.P01.Web.Controllers
             return Ok(trainStationToReturn);
         }
 
+        [HttpPost]
+        public ActionResult Create([FromBody] TrainStationCreateDto trainStationCreateDto)
+        {
+            if(String.IsNullOrWhiteSpace(trainStationCreateDto.Name))
+            {
+                return BadRequest(new Error("name", "Name cannot be empty."));
+            }
+
+            if(String.IsNullOrWhiteSpace(trainStationCreateDto.Address))
+            {
+                return BadRequest(new Error("address", "Address cannot be empty."));
+            }
+
+            if(trainStationCreateDto.Name.Length > 120)
+            {
+                return BadRequest(new Error("name", "Name cannot be longer than 120 characters."));
+            }
+
+            var trainStationToCreate = new TrainStation
+            {
+                Name = trainStationCreateDto.Name,
+                Address = trainStationCreateDto.Address,
+            };
+
+            _dataContext.TrainStations.Add(trainStationToCreate);
+            _dataContext.SaveChanges();
+
+            var trainStationToReturn = new TrainStationGetDto
+            {
+                Id = trainStationToCreate.Id,
+                Name = trainStationToCreate.Name,
+                Address = trainStationToCreate.Address,
+            };
+
+            return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id  }, trainStationToReturn);
+            
         [HttpPut("")]
         public ActionResult EditTrainStation([FromRoute] int trainStationId, TrainStationUpdateDto trainStationUpdateDto)
         {
