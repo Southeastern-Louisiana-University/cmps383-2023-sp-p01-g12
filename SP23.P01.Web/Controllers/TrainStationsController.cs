@@ -92,8 +92,9 @@ namespace SP23.P01.Web.Controllers
         }
 
         [HttpPut("/api/stations/{id}")]
-        public ActionResult UpdateStation([FromBody] TrainStationUpdateDto trainStationUpdateDto)
+        public ActionResult<TrainStationsController> UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, int id)
         {
+            var updateStations = _dataContext.TrainStations.FirstOrDefault(x => x.Id == id);
 
             //name must be provided - return 400 (bad request)
             if (String.IsNullOrWhiteSpace(trainStationUpdateDto.Name))
@@ -114,22 +115,26 @@ namespace SP23.P01.Web.Controllers
             }
 
             //update the trainStationUpdateDto with new info
+            /*
             var trainStationToUpdate = new TrainStation
             {
                 Name = trainStationUpdateDto.Name,
                 Address = trainStationUpdateDto.Address,
             };
 
-            _dataContext.SaveChanges();
+           //_dataContext.SaveChanges();
 
-            var trainStationToReturn = new TrainStationGetDto
+            var trainStationToReturn = new TrainStation
             {
                 Id = trainStationToUpdate.Id,
                 Name = trainStationToUpdate.Name,
                 Address = trainStationToUpdate.Address
             };
 
-            return Ok(trainStationToReturn);
+            _dataContext.SaveChanges();
+            */
+
+            return Ok();
         }
     }
 }
