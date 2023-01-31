@@ -113,13 +113,13 @@ namespace SP23.P01.Web.Controllers
                 return BadRequest(new Error("Name", "Name cannot be longer than 120 characters"));
             }
 
+            //update the trainStationUpdateDto with new info
             var trainStationToUpdate = new TrainStation
             {
                 Name = trainStationUpdateDto.Name,
                 Address = trainStationUpdateDto.Address,
             };
 
-            _dataContext.TrainStations.Add(trainStationToUpdate);
             _dataContext.SaveChanges();
 
             var trainStationToReturn = new TrainStationGetDto
@@ -129,7 +129,7 @@ namespace SP23.P01.Web.Controllers
                 Address = trainStationToUpdate.Address
             };
 
-            return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id }, trainStationToReturn);
+            return Ok(trainStationToReturn);
         }
     }
 }
