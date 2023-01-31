@@ -91,10 +91,16 @@ namespace SP23.P01.Web.Controllers
             return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id }, trainStationToReturn);
         }
 
-        [HttpPut("/api/stations/{id}")]
-        public ActionResult<TrainStationsController> UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, int id)
+        [HttpPut("{trainStationId}")]
+        public ActionResult UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, [FromRoute] int trainStationId)
         {
-            var updateStations = _dataContext.TrainStations.FirstOrDefault(x => x.Id == id);
+            var trainStationToUpdate = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
+
+            //can't be null
+            if (trainStationToUpdate == null)
+            {
+                return NotFound(new Error("trainStationId", "Train Station not found"));
+            }
 
             //name must be provided - return 400 (bad request)
             if (String.IsNullOrWhiteSpace(trainStationUpdateDto.Name))
@@ -115,26 +121,19 @@ namespace SP23.P01.Web.Controllers
             }
 
             //update the trainStationUpdateDto with new info
-            /*
-            var trainStationToUpdate = new TrainStation
-            {
-                Name = trainStationUpdateDto.Name,
-                Address = trainStationUpdateDto.Address,
-            };
+            trainStationToUpdate.Name = trainStationUpdateDto.Name;
+            trainStationToUpdate.Address = trainStationUpdateDto.Address;
 
-           //_dataContext.SaveChanges();
+            _dataContext.SaveChanges();
 
-            var trainStationToReturn = new TrainStation
+            var trainStationToReturn = new TrainStationGetDto
             {
                 Id = trainStationToUpdate.Id,
                 Name = trainStationToUpdate.Name,
                 Address = trainStationToUpdate.Address
             };
 
-            _dataContext.SaveChanges();
-            */
-
-            return Ok();
+            return Ok(trainStationToReturn);
         }
     }
 }
