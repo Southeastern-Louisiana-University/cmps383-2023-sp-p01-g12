@@ -89,5 +89,23 @@ namespace SP23.P01.Web.Controllers
 
             return CreatedAtAction(nameof(GetById), new { trainStationId = trainStationToReturn.Id  }, trainStationToReturn);
         }
+        [HttpDelete("{trainStationId}")]
+        public ActionResult Delete([FromRoute] int trainStationId) 
+        {
+
+            var trainStationToDelete = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
+
+
+            if (trainStationToDelete == null) 
+            { 
+                    return NotFound();
+            
+            }
+
+            _dataContext.TrainStations.Remove(trainStationToDelete);
+            _dataContext.SaveChanges();
+
+            return Ok(); 
+        }
     }
 }
