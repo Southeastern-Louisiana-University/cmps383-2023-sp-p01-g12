@@ -18,7 +18,7 @@ namespace SP23.P01.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetTrainStations()
+        public ActionResult<List<TrainStationGetDto>> GetTrainStations()
         {
 
             var trainStationToReturn = _dataContext
@@ -34,7 +34,7 @@ namespace SP23.P01.Web.Controllers
         }
 
         [HttpGet("{trainStationId}")]
-        public ActionResult GetById([FromRoute] int trainStationId)
+        public ActionResult<TrainStationGetDto> GetById([FromRoute] int trainStationId)
         {
 
             var trainStationFromDatabase = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
@@ -55,7 +55,7 @@ namespace SP23.P01.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody] TrainStationCreateDto trainStationCreateDto)
+        public ActionResult<TrainStationGetDto> Create([FromBody] TrainStationCreateDto trainStationCreateDto)
         {
             if (String.IsNullOrWhiteSpace(trainStationCreateDto.Name))
             {
@@ -92,7 +92,7 @@ namespace SP23.P01.Web.Controllers
         }
 
         [HttpPut("{trainStationId}")]
-        public ActionResult UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, [FromRoute] int trainStationId)
+        public ActionResult<TrainStationGetDto> UpdateStation([FromBody]TrainStationUpdateDto trainStationUpdateDto, [FromRoute] int trainStationId)
         {
             var trainStationToUpdate = _dataContext.TrainStations.FirstOrDefault(x => x.Id == trainStationId);
 
